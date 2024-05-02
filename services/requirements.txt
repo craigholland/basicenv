@@ -1,3 +1,5 @@
+domain
+#./database
 faker
 pyyaml
 numpy
@@ -5,3 +7,4 @@ Flask==3.0.3
 alembic==1.13.1
 gunicorn==22.0.0
 Werkzeug==3.0.1
+docker==7.0.0

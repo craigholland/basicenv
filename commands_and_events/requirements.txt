@@ -1,0 +1,7 @@
+../domain
+alembic==1.13.1
+protobuf==3.20.*
+psycopg2-binary
+sqlalchemy-utils
+sqla-wrapper==3.0.0
+sqlalchemy==1.4.42
