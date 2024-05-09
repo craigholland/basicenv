@@ -3,5 +3,7 @@
 ../.idea
 .*
 !/.gitignore
-build
+build/
 *.egg-info
+dockerbuild/
+.venv/

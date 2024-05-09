@@ -1,17 +1,55 @@
 #!/bin/sh
+usage() { echo "usage comment"; exit 1;}
+bool(){ return "$((!${#1}))"; }
 
 set -e
+REPO=${DEFAULT_CONTAINER_REPO:-""}
+TAG=${DEFAULT_CONTAINER_TAG:-""}
+GCP_AR_ID=${GCP_AR_ID:-""}
+GCP_PROJECT_ID=${GCP_PROJECT_ID:-""}
+GCP_REGION=${GCP_REGION:-""}
 
-GCAR_IO=${GCAR_IO:-"local"}
-GCP_PROJECT_ID=${GCP_PROJECT_ID:-"local"}
+GCP=false
+VERSION="0.0.1"
+while getopts "r:t:v::g" arg; do
+  case "${arg}" in
+    r)  # Repo
+      REPO=${OPTARG}
+      ;;
+    t)  # Tag
+      TAG=${OPTARG}
+      ;;
+    v)  # Version
+      VERSION=${OPTARG}
+      ;;
+    g)  # Follow GCP Format
+      GCP=true
+      ;;
+    *)
+      usage
+      ;;
+  esac
+done
+if [ -z "$REPO" ] || [ -z "$TAG" ]; then
+  usage
+fi
 
-TAG="cholland/servicestest"
-VERSION="1.0.2"
-REPO="${GCAR_IO}/${GCP_PROJECT_ID}"
+if [ "$GCP" = true ]; then
+  if [ -n "$GCP_AR_ID" ] && [ -n "$GCP_PROJECT_ID" ] && [ -n "$GCP_REGION" ]; then
+    REPO="${GCP_REGION}/${GCP_PROJECT_ID}/${GCP_AR_ID}"
+  else
+    echo "Can't build image for GCP -- missing configs:"
+    echo "GCP_AR_ID: $GCP_AR_ID"
+    echo "GCP_PROJECT_ID: $GCP_PROJECT_ID"
+    echo "GCP_REGION: $GCP_REGION"
+    exit
+  fi
+fi
+
+REPOTAG="${REPO}/${TAG}:${VERSION}"
 
 # Create docker repo
 if test -d dockerbuild; then
-  echo "Updating old dockerbuild directory...\n"
   rm -rf dockerbuild
 fi
 mkdir dockerbuild
@@ -29,9 +67,7 @@ for mod in "$@"; do
 
   ln -s "$pwd/$mod" "$mod"
   if [ -L "$mod" ] && [ -d "$mod" ]; then
-    echo "Symlink /app/$mod created..."
     rsync -av "$mod" "api/dockerbuild" --exclude .venv --exclude .idea --copy-links
-    echo "Syncing symlink '$mod' with dockerbuild directory..."
   fi
   echo "\n"
 done
@@ -40,7 +76,8 @@ cd api
 eval "set -- $old"
 
 
-docker build --tag="${REPO}/${TAG}:${VERSION}" .
+docker build --tag="${REPOTAG}" .
+docker system prune -a --filter "label=stage=intermediate" --force
 #
 #docker stop servicestest
 #docker system prune -a

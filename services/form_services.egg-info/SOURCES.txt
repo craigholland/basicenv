@@ -1,5 +1,0 @@
-setup.py
-form_services.egg-info/PKG-INFO
-form_services.egg-info/SOURCES.txt
-form_services.egg-info/dependency_links.txt
-form_services.egg-info/top_level.txt
