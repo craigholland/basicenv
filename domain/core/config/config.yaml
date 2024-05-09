@@ -12,7 +12,7 @@
 #  alt_name: AGE_IN_YEARS   (> config.age_in_years -> "18")
 
 
-UHG_DEBUG:
+APP_DEBUG:
   datatype: int
   default: 0
 

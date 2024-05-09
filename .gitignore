@@ -1,0 +1,9 @@
+*.pyc
+.idea/
+../.idea
+.*
+!/.gitignore
+build/
+*.egg-info
+dockerbuild/
+.venv/

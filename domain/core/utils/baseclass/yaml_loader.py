@@ -15,9 +15,12 @@ class YAMLLoader:
     @classmethod
     def _load_yaml_file(cls, filename=None):
         if filename:
-            return load_yaml(filename)
-        return None
+            try:
+                return load_yaml(filename)
+            except FileNotFoundError:
+                pass
+        return {}
 
     @property
-    def _asdict(self):
+    def asdict(self):
         return self._yaml_dct

@@ -5,3 +5,4 @@ psycopg2-binary
 sqlalchemy-utils
 sqla-wrapper==3.0.0
 sqlalchemy==1.4.42
+pyyaml

@@ -1,4 +1,5 @@
 FROM python:3.12 as python_pkg_installer
+LABEL stage=intermediate
 WORKDIR /app
 COPY dockerbuild/domain domain
 COPY dockerbuild/database database
@@ -19,7 +20,7 @@ COPY main.py /app
 EXPOSE 8081
 ENV FLASK_APP=main.py
 ENV PYTHONPATH /app:/app/services/build/lib
-
-LABEL authors="rook"
+LABEL stage="final"
+LABEL author="cholland"
 
 ENTRYPOINT ["bash", "docker-entrypoint.sh"]

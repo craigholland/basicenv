@@ -1,0 +1,17 @@
+DB_PROTOCOL:
+  default: postgresql
+DB_URI:
+  default: 35.212.151.57
+DB_URI_PORT:
+  default: 5432
+DB_USER:
+  default: postgres
+DB_PASSWORD:
+  default: postgres
+DB_DATABASE:
+  default: chollanddb
+CONNECT_TIMEOUT:
+  default: 20
+DATABASE_ECHO:
+  default: '0'
+
